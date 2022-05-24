@@ -9,37 +9,35 @@ const {
 const client = new Client({
   intents: ["GUILDS", "GUILD_MEMBERS", "GUILD_MESSAGES"],
 });
-
+let commands = [
+  {
+    name: "snake",
+    description: `play snake game on discord`,
+    type: "CHAT_INPUT",
+  },
+  {
+    name: "ping",
+    description: `see ping of bot`,
+    type: "CHAT_INPUT",
+  },
+  {
+    name: "leaderboard",
+    description: `check global leaderboard`,
+    type: "CHAT_INPUT",
+  },
+  {
+    name: "stop",
+    description: `stop your running game`,
+    type: "CHAT_INPUT",
+  },
+];
 client.on("ready", async () => {
   console.log("bot is online", client.user.tag);
   client.user.setActivity({
     name: `SnakeJI`,
     type: "PLAYING",
   });
-  let commands = [
-    {
-      name: "snake",
-      description: `play snake game on discord`,
-      type: "CHAT_INPUT",
-    },
-    {
-      name: "ping",
-      description: `see ping of bot`,
-      type: "CHAT_INPUT",
-    },
-    {
-      name: "leaderboard",
-      description: `check global leaderboard`,
-      type: "CHAT_INPUT",
-    },
-    {
-      name: "stop",
-      description: `stop your running game`,
-      type: "CHAT_INPUT",
-    },
-  ];
   client.application.commands.set([]);
-  client.guilds.cache.get("903532162236694539").commands.set(commands);
 });
 
 // declaring cache db to store game data
@@ -379,6 +377,10 @@ client.on("interactionCreate", async (interaction) => {
         break;
     }
   }
+});
+
+client.on("guildCreate", async (guild) => {
+  await guild.commands.set(commands);
 });
 
 client.login(process.env.TOKEN || "BOT_TOKEN");
